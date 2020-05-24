@@ -2,6 +2,8 @@ plugins {
 	id 'org.springframework.boot' version '2.3.0.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
+    id 'jacoco'
+
 }
 
 group = 'com.corea95'
@@ -21,4 +23,14 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule { 
+                limit {
+                    minimum = 0.2 
+                    }
+             }
+      }
 }
