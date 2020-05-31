@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-	registry = "juht/calculator"
+	registry = "corea95/calculator"
         registryCredential = 'dockerhub'
  	dockerImage = ''
     }
