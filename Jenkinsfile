@@ -2,13 +2,13 @@ pipeline {
     agent any
     environment {
 	registry = "juht/calculator"
-	registryCredential="dockerhub"
-	dockerImage=''
+        registryCredential = 'dockerhub'
+ 	dockerImage = ''
     }
     stages {
         stage ('Check out'){
             steps {
-		git branch: 'uat', url: 'https://github.com/juht/calculator.git'
+               git url: 'https://github.com/corea95/calculator.git'
             }
         }
         stage ('Compile') {
@@ -42,15 +42,36 @@ pipeline {
                 ])
             }
         }
-	stage('Packaging') {
-	    steps {
-		sh "./gradlew build"
-	    }
+        stage ('Package'){
+            steps {
+                sh "./gradlew build"
+            }
         }
-	stage('Deploy Image'){
+        stage ('Docker Build') {
+            steps {
+		script {
+		    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+		}
+            }
+        }
+	stage('Deploy Image') {
 	    steps {
 		script {
-		   dockerImage = docker.build registry + ":$BUILD_NUMBER"
+		    docker.withRegistry('',registryCredential ) {
+		        dockerImage.push()
+		    }
+		}
+	    }
+    	}
+	stage('Acceptance Testing'){
+	    steps {
+		script {
+		    docker.withServer('tcp://docker:2376',''){
+			dockerImage.withRun('-p 8090:8090') {
+			     sleep 10
+			     sh './acceptance_test.bash'
+			}
+		    }
 		}
 	    }
         }
