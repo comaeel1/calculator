@@ -1,2 +1,2 @@
 # calculator
-This is sample repository for calculator
+This is a sample repository for calculator

@@ -1,13 +1,12 @@
 plugins {
-	id 'org.springframework.boot' version '2.3.0.RELEASE'
+	id 'org.springframework.boot' version '2.2.6.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
-    id 'jacoco'
-    id 'checkstyle'
-
+	id 'jacoco'
+	id 'checkstyle'
 }
 
-group = 'com.corea95'
+group = 'com.juht'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
@@ -27,11 +26,11 @@ test {
 }
 
 jacocoTestCoverageVerification {
-    violationRules {
-        rule { 
-                limit {
-                    minimum = 0.3 
-                    }
-             }
-      }
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.4
+			}
+		}
+	}
 }
