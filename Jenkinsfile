@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-	registry = "juht/calculator"
-        registryCredential = 'dockerhub'
+	registry = "dusqja231/calculator"
+    registryCredential = "dockerhub"
  	dockerImage = ''
     }
     stages {
@@ -42,38 +42,26 @@ pipeline {
                 ])
             }
         }
-        stage ('Package'){
+        stage ('Packaging'){
             steps {
                 sh "./gradlew build"
             }
         }
-        stage ('Docker Build') {
+        stage ('Deploy Image') {
             steps {
 		script {
 		    dockerImage = docker.build registry + ":$BUILD_NUMBER"
 		}
             }
         }
-	stage('Deploy Image') {
+	stage('Push Image') {
 	    steps {
 		script {
 		    docker.withRegistry('',registryCredential ) {
 		        dockerImage.push()
 		    }
 		}
-	    }
-    	}
-	stage('Acceptance Testing'){
-	    steps {
-		script {
-		    docker.withServer('tcp://docker:2376',''){
-			dockerImage.withRun('-p 8090:8090') {
-			     sleep 10
-			     sh './acceptance_test.bash'
-			}
-		    }
-		}
-	    }
-        }
+	  }
     }
+  }
 }
