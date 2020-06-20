@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+    reverseproxy:
+        image: reverse-proxy
+        ports:
+            - 8090:8090
+        restart: always
+
+    calculator1:
+        depends_on:
+            - reverseproxy
+        image: dusqja231/calculator
+        expose:
+            - "8090"
+        restart: always
+
+    calculator2:
+        depends_on:
+             - reverseproxy
+        image: dusqja231/calculator
+        expose:
+            - "8090"
+        restart: always
+
